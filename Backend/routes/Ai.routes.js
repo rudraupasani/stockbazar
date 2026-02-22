@@ -1,8 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
 const Airouter = express.Router();
 
-const API_KEY = "AIzaSyBwihIdw8zNLKzh-cpuDPOyJRYWpKL5xlw";
+const API_KEY = process.env.API_KEY;
 
 // Try models in order until one works
 const GEMINI_MODELS = [

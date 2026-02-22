@@ -1,6 +1,7 @@
+require("dotenv").config();
 const axios = require("axios");
 
-const API_KEY = "AIzaSyBwihIdw8zNLKzh-cpuDPOyJRYWpKL5xlw";
+const API_KEY = process.env.API_KEY;
 const GEMINI_MODELS = [
     "gemini-2.5-flash",
 ];
