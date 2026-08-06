@@ -66,7 +66,7 @@ const WatchlistPage = () => {
         async function fetch_() {
             try {
                 setLoading(true);
-                const res = await axios.get("http://localhost:5000/api/market/top-gainers");
+                const res = await axios.get("import.meta.env.VITE_API_BASE_URL/api/market/top-gainers");
                 if (res.data.success) {
                     const coins = res.data.gainers.map((c) => ({
                         ...c,
@@ -93,7 +93,7 @@ const WatchlistPage = () => {
 
     // Live price WebSocket
     useEffect(() => {
-        const ws = new WebSocket("ws://localhost:5000/ws/live-prices");
+        const ws = new WebSocket("import.meta.env.VITE_WS_BASE_URL/ws/live-prices");
         ws.onmessage = (msg) => {
             try {
                 const live = JSON.parse(msg.data);
@@ -434,3 +434,5 @@ const WatchlistPage = () => {
 };
 
 export default WatchlistPage;
+
+

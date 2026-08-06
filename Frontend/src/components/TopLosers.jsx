@@ -14,7 +14,7 @@ const TopLosers = () => {
     useEffect(() => {
         async function fetchLosers() {
             try {
-                const res = await axios.get("http://localhost:5000/api/market/top-movers");
+                const res = await axios.get("import.meta.env.VITE_API_BASE_URL/api/market/top-movers");
                 if (res.data.success) setLosers(res.data.topLosers?.slice(0, 6) || []);
             } catch (err) {
                 console.error("Losers fetch error:", err);
@@ -25,7 +25,7 @@ const TopLosers = () => {
 
     // websocket live updates
     useEffect(() => {
-        const ws = new WebSocket("ws://localhost:5000/ws/live-prices");
+        const ws = new WebSocket("import.meta.env.VITE_WS_BASE_URL/ws/live-prices");
         ws.onmessage = (msg) => {
             try {
                 const live = JSON.parse(msg.data);
@@ -117,3 +117,5 @@ const TopLosers = () => {
 };
 
 export default TopLosers;
+
+

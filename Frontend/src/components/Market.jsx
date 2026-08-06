@@ -49,7 +49,7 @@ const MarketPage = () => {
     useEffect(() => {
         async function load() {
             try {
-                const res = await axios.get("http://localhost:5000/api/market/top-gainers");
+                const res = await axios.get("import.meta.env.VITE_API_BASE_URL/api/market/top-gainers");
                 if (res.data.success) {
                     const coinsWithChart = res.data.gainers.map((c) => ({
                         ...c,
@@ -70,7 +70,7 @@ const MarketPage = () => {
     }, []);
 
     useEffect(() => {
-        wsRef.current = new WebSocket("ws://localhost:5000/ws/live-prices");
+        wsRef.current = new WebSocket("import.meta.env.VITE_WS_BASE_URL/ws/live-prices");
         wsRef.current.onmessage = (msg) => {
             try {
                 const live = JSON.parse(msg.data);
@@ -300,3 +300,5 @@ const MarketPage = () => {
 };
 
 export default MarketPage;
+
+

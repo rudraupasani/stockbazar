@@ -23,3 +23,5 @@ const MarketMiniChart = ({ chartData }) => {
 };
 
 export default MarketMiniChart;
+
+
