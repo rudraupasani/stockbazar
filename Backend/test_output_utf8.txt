@@ -1,0 +1,38 @@
+﻿Testing model: gemini-2.5-flash
+--- RAW RESPONSE ---
+[TREND]Bullish[/TREND]
+[TREND_SCORE]70[/TREND_SCORE]
+[MOMENTUM]Strong Up[/MOMENTUM]
+[VOLATILITY]Medium[/VOLATILITY]
+[SUPPORT]Γé╣8,100,000[/SUPPORT]
+[RESISTANCE]Γé╣8,300,000[/RESISTANCE]
+[STOP_LOSS]Γé╣8,050,000[/STOP_LOSS]
+[TAKE_PROFIT]Γé╣8,450,000[/TAKE_PROFIT]
+[SENTIMENT]Bullish[/SENTIMENT]
+[WHALE_ACTIVITY]Accumulation[/WHALE_ACTIVITY]
+[PATTERN]None identifiable[/PATTERN]
+[PREDICTION_24H]Slight upward continuation, potentially testing Γé╣
+--------------------
+--- PARSED RESPONSE ---
+{
+  trend: 'Bullish',
+  trend_score: 70,
+  momentum: 'Strong Up',
+  volatility: 'Medium',
+  support: 'Γé╣8,100,000',
+  resistance: 'Γé╣8,300,000',
+  stop_loss: 'Γé╣8,050,000',
+  take_profit: 'Γé╣8,450,000',
+  sentiment: 'Bullish',
+  whale_activity: 'Accumulation',
+  pattern: 'None identifiable',
+  prediction_24h: 'Slight upward continuation, potentially testing Γé╣',
+  prediction_7d: 'N/A',
+  risk: 'Medium',
+  confidence: 50,
+  grade: 'C',
+  buy_signal: 'Hold',
+  summary_beginner: 'No summary available.',
+  summary_advanced: 'No technical summary available.',
+  key_levels: []
+}
