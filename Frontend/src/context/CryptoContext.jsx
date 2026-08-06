@@ -17,13 +17,13 @@ export const CryptoProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const moversRes = await axios.get("http://localhost:5000/api/market/top-movers");
+        const moversRes = await axios.get("https://stockbazar-4.onrender.com/api/market/top-movers");
         if (moversRes.data.success) {
           setTopGainers(moversRes.data.topGainers || []);
           setTopLosers(moversRes.data.topLosers || []);
         }
 
-        const overviewRes = await axios.get("http://localhost:5000/api/market/overview");
+        const overviewRes = await axios.get("https://stockbazar-4.onrender.com/api/market/overview");
         if (overviewRes.data.success) {
           const o = overviewRes.data.overview;
           setOverviewData({
@@ -34,7 +34,7 @@ export const CryptoProvider = ({ children }) => {
           });
         }
 
-        const newsRes = await axios.get("http://localhost:5000/api/market/news");
+        const newsRes = await axios.get("https://stockbazar-4.onrender.com/api/market/news");
         if (newsRes.data.success) setNews(newsRes.data.news || []);
       } catch (err) {
         console.error("Failed to fetch market data:", err);
@@ -45,7 +45,7 @@ export const CryptoProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const ws = new WebSocket("http:/localhost:5000/ws/live-prices");
+    const ws = new WebSocket("wss://stockbazar-4.onrender.com/ws/live-prices");
 
     ws.onopen = () => console.log("Connected to live prices WebSocket");
 

@@ -29,7 +29,7 @@ const HomeTop10Live = () => {
   useEffect(() => {
     async function fetchTopGainers() {
       try {
-        const res = await axios.get("http://localhost:5000/api/market/top-gainers");
+        const res = await axios.get("https://stockbazar-4.onrender.com/api/market/top-gainers");
         if (res.data.success) {
           const topCoins = res.data.gainers.map((coin) => {
             const min = coin.low_24h || coin.current_price * 0.98;
@@ -49,7 +49,7 @@ const HomeTop10Live = () => {
   }, []);
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:5000/ws/live-prices");
+    const ws = new WebSocket("wss://stockbazar-4.onrender.com/ws/live-prices");
     ws.onmessage = (message) => {
       try {
         const liveData = JSON.parse(message.data);

@@ -66,7 +66,7 @@ const WatchlistPage = () => {
         async function fetch_() {
             try {
                 setLoading(true);
-                const res = await axios.get("http://localhost:5000/api/market/top-gainers");
+                const res = await axios.get("https://stockbazar-4.onrender.com/api/market/top-gainers");
                 if (res.data.success) {
                     const coins = res.data.gainers.map((c) => ({
                         ...c,
@@ -93,7 +93,7 @@ const WatchlistPage = () => {
 
     // Live price WebSocket
     useEffect(() => {
-        const ws = new WebSocket("ws://localhost:5000/ws/live-prices");
+        const ws = new WebSocket("wss://stockbazar-4.onrender.com/ws/live-prices");
         ws.onmessage = (msg) => {
             try {
                 const live = JSON.parse(msg.data);
