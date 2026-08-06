@@ -18,7 +18,7 @@ const MarketBarChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("import.meta.env.VITE_API_BASE_URL/api/market/top-gainers");
+        const res = await axios.get("http://localhost:5000/api/market/top-gainers");
         if (res.data.success) {
           setCoins(res.data.gainers.slice(0, 8));
         }

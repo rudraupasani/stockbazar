@@ -3,9 +3,27 @@ const express = require("express");
 const axios = require("axios");
 const Airouter = express.Router();
 
-const CEREBRAS_API_KEY = process.env.CEREBRAS_API_KEY
-const CEREBRAS_MODEL = process.env.CEREBRAS_MODEL 
-const CEREBRAS_BASE_URL = process.env.CEREBRAS_BASE_URL 
+const CEREBRAS_API_KEY = process.env.CEREBRAS_API_KEY;
+const CEREBRAS_MODEL = process.env.CEREBRAS_MODEL;
+const CEREBRAS_BASE_URL = process.env.CEREBRAS_BASE_URL;
+
+let USD_INR = 83;
+
+// Update USD → INR periodically
+async function updateUSDtoINR() {
+  try {
+    const { data } = await axios.get(
+      "https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=inr"
+    );
+    if (data && data.tether && data.tether.inr) {
+      USD_INR = data.tether.inr;
+    }
+  } catch (err) {
+    // silently use fallback
+  }
+}
+updateUSDtoINR();
+setInterval(updateUSDtoINR, 300000);
 
 async function fallbackAnalysis(coinData) {
   const price = Number(coinData?.current_price || 0);
@@ -92,39 +110,64 @@ async function callCerebras(prompt) {
   }
 }
 
-// ─── GET /api/ai/coins  (returns coin list from Binance for search) ────────────
+const popularMap = [
+  { symbol: "BTC", krakenPair: "XXBTZUSD", name: "Bitcoin" },
+  { symbol: "ETH", krakenPair: "XETHZUSD", name: "Ethereum" },
+  { symbol: "BNB", krakenPair: "BNBUSD", name: "BNB" },
+  { symbol: "XRP", krakenPair: "XXRPZUSD", name: "XRP" },
+  { symbol: "ADA", krakenPair: "ADAUSD", name: "Cardano" },
+  { symbol: "DOGE", krakenPair: "XDGUSD", name: "Dogecoin" },
+  { symbol: "SOL", krakenPair: "SOLUSD", name: "Solana" },
+  { symbol: "DOT", krakenPair: "DOTUSD", name: "Polkadot" },
+  { symbol: "TRX", krakenPair: "TRXUSD", name: "TRON" },
+  { symbol: "LTC", krakenPair: "XLTCZUSD", name: "Litecoin" },
+  { symbol: "SHIB", krakenPair: "SHIBUSD", name: "Shiba Inu" },
+  { symbol: "AVAX", krakenPair: "AVAXUSD", name: "Avalanche" },
+  { symbol: "UNI", krakenPair: "UNIUSD", name: "Uniswap" },
+  { symbol: "LINK", krakenPair: "LINKUSD", name: "Chainlink" },
+  { symbol: "ATOM", krakenPair: "ATOMUSD", name: "Cosmos" },
+  { symbol: "MATIC", krakenPair: "POLUSD", name: "Polygon" },
+  { symbol: "NEAR", krakenPair: "NEARUSD", name: "NEAR Protocol" },
+  { symbol: "FIL", krakenPair: "FILUSD", name: "Filecoin" },
+  { symbol: "APT", krakenPair: "APTUSD", name: "Aptos" },
+  { symbol: "ARB", krakenPair: "ARBUSD", name: "Arbitrum" },
+  { symbol: "OP", krakenPair: "OPUSD", name: "Optimism" },
+  { symbol: "SUI", krakenPair: "SUIUSD", name: "Sui" },
+  { symbol: "ICP", krakenPair: "ICPUSD", name: "Internet Computer" },
+  { symbol: "AAVE", krakenPair: "AAVEUSD", name: "Aave" },
+  { symbol: "GRT", krakenPair: "GRTUSD", name: "The Graph" },
+  { symbol: "SAND", krakenPair: "SANDUSD", name: "The Sandbox" },
+  { symbol: "MANA", krakenPair: "MANAUSD", name: "Decentraland" },
+  { symbol: "GALA", krakenPair: "GALAUSD", name: "Gala" },
+  { symbol: "HBAR", krakenPair: "HBARUSD", name: "Hedera" },
+  { symbol: "VET", krakenPair: "VETUSD", name: "VeChain" },
+];
+
+// ─── GET /api/ai/coins  (returns coin list from Kraken for search) ────────────
 Airouter.get("/coins", async (req, res) => {
   try {
-    const { data } = await axios.get("https://api.binance.com/api/v3/ticker/24hr");
-    const USDT_INR = 83;
+    const pairs = popularMap.map((c) => c.krakenPair).join(",");
+    const { data } = await axios.get(`https://api.kraken.com/0/public/Ticker?pair=${pairs}`);
+    const assets = data.result;
 
-    const exclude = ["BUSD", "FDUSD", "USDC", "TUSD", "USDT"];
-    const avoid = ["UP", "DOWN", "BULL", "BEAR"];
-
-    const popular = [
-      "BTC", "ETH", "BNB", "ADA", "XRP", "SOL", "DOGE", "DOT", "LTC", "AVAX",
-      "SHIB", "MATIC", "TRX", "UNI", "LINK", "ATOM", "ALGO", "FTM", "NEAR", "APT",
-      "OP", "ARB", "RNDR", "INJ", "SUI", "VET", "ICP", "FIL", "AAVE", "MKR",
-      "SNX", "COMP", "SUSHI", "GRT", "AXS", "ENJ", "CHZ", "BAT", "GALA", "SAND",
-      "THETA", "HBAR", "WAVES", "QTUM", "NANO", "ZIL", "ONT", "SC", "RVN", "ETC",
-    ];
-
-    const coins = popular.map((symbol) => {
-      const found = data.find(
-        (c) =>
-          c.symbol === `${symbol}USDT` &&
-          !avoid.some((t) => c.symbol.includes(t))
-      );
+    const coins = popularMap.map((coin) => {
+      const found = assets[coin.krakenPair];
       if (!found) return null;
+
+      const price = Number(found.c[0]);
+      const open = Number(found.o);
+      const change24h = open > 0 ? ((price - open) / open) * 100 : 0;
+      const volumeUsd = Number(found.v[1]) * price;
+
       return {
-        symbol,
-        name: symbol,
-        current_price: Number(found.lastPrice) * USDT_INR,
-        price_change_percentage_24h: Number(found.priceChangePercent),
-        high_24h: Number(found.highPrice) * USDT_INR,
-        low_24h: Number(found.lowPrice) * USDT_INR,
-        volume: Number(found.volume) * USDT_INR,
-        image: `https://cryptoicons.org/api/icon/${symbol.toLowerCase()}/200`,
+        symbol: coin.symbol,
+        name: coin.name,
+        current_price: price * USD_INR,
+        price_change_percentage_24h: Number(change24h.toFixed(2)),
+        high_24h: Number(found.h[1]) * USD_INR,
+        low_24h: Number(found.l[1]) * USD_INR,
+        volume: volumeUsd * USD_INR,
+        image: `https://cryptoicons.org/api/icon/${coin.symbol.toLowerCase()}/200`,
       };
     }).filter(Boolean);
 
@@ -141,12 +184,10 @@ function parseTaggedText(text, schema) {
   const result = {};
   for (const key in schema) {
     const tag = key.toUpperCase();
-    // More flexible regex: allows [TAG], [ TAG ], [TAG]:, etc.
     const regex = new RegExp(`\\[\\s*${tag}\\s*\\]\\s*:?\\s*([\\s\\S]*?)(?:\\[\\/\\s*${tag}\\s*\\]|$)`, "i");
     const match = text.match(regex);
     if (match) {
       let val = match[1].trim();
-      // Basic type casting
       if (typeof schema[key] === "number") {
         val = parseFloat(val.replace(/[^0-9.]/g, "")) || 0;
       } else if (Array.isArray(schema[key])) {
@@ -241,10 +282,6 @@ ${JSON.stringify(coinData)}
       console.warn("Falling back to local analysis response.", fallbackErr.message);
       aiJSON = await fallbackAnalysis(coinData);
     }
-
-    // Fix a typo in the tag list (MOMOMENTUM vs MOMENTUM) for the parser if AI follows the prompt exactly
-    // But let's make the parser more robust by checking both if needed, 
-    // or just fix the prompt and parser to match.
 
     console.log("✅ Final Parsed Analysis:", aiJSON);
     res.json({ success: true, analysis: aiJSON });

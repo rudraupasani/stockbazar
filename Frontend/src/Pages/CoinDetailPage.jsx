@@ -39,7 +39,7 @@ const CoinDetailPage = () => {
     const fetchCoin = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("import.meta.env.VITE_API_BASE_URL/api/market/top-gainers");
+        const res = await axios.get("http://localhost:5000/api/market/top-gainers");
         if (res.data.success) {
           const match = res.data.gainers.find(
             (item) => item.symbol?.toLowerCase() === symbol?.toLowerCase()

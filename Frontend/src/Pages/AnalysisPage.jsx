@@ -211,7 +211,7 @@ const AnalysisPage = () => {
 
     /* Fetch coin list */
     useEffect(() => {
-        axios.get("import.meta.env.VITE_API_BASE_URL/api/market/top-gainers")
+        axios.get("http://localhost:5000/api/market/top-gainers")
             .then((r) => {
                 if (r.data.success) setCoins(r.data.gainers || []);
                 else setCoins([]);
@@ -244,7 +244,7 @@ const AnalysisPage = () => {
         setResult(null);
         setError("");
         try {
-            const r = await axios.post("import.meta.env.VITE_API_BASE_URL/api/ai/analysis", {
+            const r = await axios.post("http://localhost:5000/api/ai/analysis", {
                 coinData: {
                     symbol: selected.symbol,
                     name: selected.name,
