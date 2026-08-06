@@ -1,23 +1,22 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node index.js",
-    "build": "npm install",
     "test": "echo \"No test specified\""
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "axios": "^1.13.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "iconv-lite": "^0.6.3",
     "openai": "^6.9.1",
     "ws": "^8.18.3"
   }
