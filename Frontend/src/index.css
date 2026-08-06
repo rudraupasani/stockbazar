@@ -1,0 +1,169 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+/* ─── Light Theme (default) ─────────────────────────────────── */
+:root {
+  --bg-base: #f8fafc;
+  --bg-surface: #ffffff;
+  --card-bg: #ffffff;
+  --card-bg-hover: #f1f5f9;
+  --border: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --accent: #f59e0b;
+  --accent-hover: #d97706;
+  --accent-text: #92400e;
+  --accent-bg: rgba(245, 158, 11, 0.08);
+  --accent-border: rgba(245, 158, 11, 0.15);
+  --navbar-bg: rgba(255, 255, 255, 0.85);
+  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  --green: #10b981;
+  --green-bg: rgba(16, 185, 129, 0.08);
+  --red: #ef4444;
+  --red-bg: rgba(239, 68, 68, 0.08);
+}
+
+/* ─── Dark Theme ─────────────────────────────────────────────── */
+.dark {
+  --bg-base: #050a10;
+  --bg-surface: #0d1117;
+  --card-bg: #111827;
+  --card-bg-hover: #1a1f2c;
+  --border: #1f2937;
+  --border-hover: #374151;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent: #f59e0b;
+  --accent-hover: #fbbf24;
+  --accent-text: #fde68a;
+  --accent-bg: rgba(245, 158, 11, 0.12);
+  --accent-border: rgba(245, 158, 11, 0.20);
+  --navbar-bg: rgba(5, 10, 16, 0.92);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.4);
+  --green: #22c55e;
+  --green-bg: rgba(34, 197, 94, 0.10);
+  --red: #ef4444;
+  --red-bg: rgba(239, 68, 68, 0.10);
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────── */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ─── Utility Classes ─────────────────────────────────────────── */
+.sb-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s;
+}
+
+.sb-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow);
+}
+
+.sb-card-accent:hover {
+  border-color: var(--accent);
+}
+
+.sb-btn-primary {
+  background-color: var(--accent);
+  color: #000;
+  font-weight: 700;
+  padding: 0.6rem 1.6rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s, transform 0.15s;
+}
+
+.sb-btn-primary:hover {
+  background-color: var(--accent-hover);
+  transform: scale(1.03);
+}
+
+.sb-btn-ghost {
+  background-color: var(--accent-bg);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+  font-weight: 600;
+  padding: 0.6rem 1.6rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s, transform 0.15s;
+}
+
+.sb-btn-ghost:hover {
+  background-color: var(--accent-border);
+  transform: scale(1.03);
+}
+
+.sb-badge-up {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--green);
+  background-color: var(--green-bg);
+}
+
+.sb-badge-down {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--red);
+  background-color: var(--red-bg);
+}
