@@ -18,7 +18,7 @@ const MarketBarChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/market/top-gainers");
+        const res = await axios.get("https://stockbazar-4.onrender.com/api/market/top-gainers");
         if (res.data.success) {
           setCoins(res.data.gainers.slice(0, 8));
         }
@@ -83,3 +83,5 @@ const MarketBarChart = () => {
 };
 
 export default MarketBarChart;
+
+
